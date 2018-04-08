@@ -3,6 +3,7 @@ namespace app\controllers;
 
 use yii\web\Controller;
 use yii\web\Cookie;
+use app\models\Test;
 
 
 class HelloController extends Controller {
@@ -89,6 +90,72 @@ class HelloController extends Controller {
   public function actionBlock()
   {
     return $this->render('block');
+  }
+
+  public function actionDbSelect()
+  {
+    //查询数据
+    //1，sql 查询
+    //print_r("sql查询");
+    //$sql = "select * from test where id=1";
+    //$results = Test::findBySql($sql)->all();
+    //print_r($results);
+
+
+    //2，用户输入插叙，数据绑定
+    //print_r("绑定数据查询");
+    //$id = 2;//数据攻击会被过滤 
+    //$sql = "select * from test where id=:id";
+    //$results = Test::findBySql($sql,[":id"=>$id])->all();
+    //print_r($results);
+
+    //3，通过数组方式查询
+    //print_r("数组查询");
+    //$results = Test::find()->where(["id"=>1])->all();
+    //print_r($results);
+
+    //4,>
+    //$results = Test::find()->where(['>', 'id', 0])->all();
+    //print_r($results);
+
+    //5,id>=1 and id<=2
+    //$results = Test::find()->where(['between', 'id', 1,2])->all();
+    //print_r($results);
+
+    //6,like 
+    //$results = Test::find()->where(['like', 'title', "title"])->all();
+    //print_r($results);
+
+    //7,查询结果转化为数组
+    //$results = Test::find()->where(['like', 'title', "title"])->asArray()->all();
+    //print_r($results);
+
+    //8，批量查询
+    $query = Test::find()->batch(1);
+    foreach($query as $test){
+      print_r($test);
+    }
+  }
+
+  public function actionDbDelete()
+  {
+    //删除数据
+    //$result = Test::find()->where(["id"=>1])->all();
+    //$result[0]->delete();
+
+    //占位符删除
+    $id = 0;
+    Test::deleteAll("id>:id",[":id" => $id]);
+  }
+
+  public function actionDbInsert()
+  {
+    //添加数据
+    $test = new Test();
+    $test->id = 3;
+    $test->title = "title3";
+    $test->save();
+
   }
 
 }
